@@ -67,12 +67,6 @@ class MyServer(BaseHTTPRequestHandler):
         self.do_HEAD()
         self.wfile.write(html.encode("utf-8"))
 
-#     Add Slider to adjust duty cycle 
-  #         <div class="slidecontainer">
-  #            <div>
-  #            DutyCycle :
-  #            <input type="range" min="1" max="255" value="128">
-
     def do_POST(self):
 
         content_length = int(self.headers['Content-Length'])  # Get the size of data
