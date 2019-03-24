@@ -8,6 +8,8 @@ Webserver code adapted from <a href="https://github.com/e-tinkers/simple_httpser
 Useful resource for <a href="https://www.pythonforbeginners.com/code-snippets-source-code/python-using-telnet
 ">using telnet in python </a>
 
+<a href="https://www.ev3dev.org/docs/tutorials/setting-up-wifi-using-the-command-line/">Setting up WiFi</a> on an EV3 running on EV3Dev
+
 To install telnet on the EV3:
 1. Updates the package list 
 ```
