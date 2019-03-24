@@ -1,5 +1,7 @@
 # Daniel McGinn
 # Run with python3
+# Serves webpage on localhost
+# See MacEV3HubMap.png
 
 from time import sleep
 from http.server import BaseHTTPRequestHandler, HTTPServer
