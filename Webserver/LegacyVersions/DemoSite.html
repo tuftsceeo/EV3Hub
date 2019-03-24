@@ -1,24 +1,22 @@
 <html>
 <body style="width:960px; margin: 20px auto;">
-<h1>EV3Dev Telnet Demo</h1>
+<h1>EV3Dev Telnet Webserver Demo</h1>
 <p>Control EV3 Onboard LEDs</p>
 <form action="/" method="POST">
-   LED :
-   <input type="submit" name="submit" value="Red">
-   <input type="submit" name="submit" value="Orange">
-   <input type="submit" name="submit" value="Yellow">
-   <input type="submit" name="submit" value="Green">
-   <input type="submit" name="submit" value="Off">
-<div class="slidecontainer">
+  <input type="submit" name="submit" value="Red">
+  <input type="submit" name="submit" value="Orange">
+  <input type="submit" name="submit" value="Yellow">
+  <input type="submit" name="submit" value="Green">
+  <input type="submit" name="submit" value="Off">
 <p>Drive EV3</p>
-<form action="/" method="POST">
-  DutyCycle :
-  <input type="range" min="1" max="255" value="128">
-  Drive :
   <input type="submit" name="submit" value="Left">
   <input type="submit" name="submit" value="Forward">
   <input type="submit" name="submit" value="Right">
-  <input type="submit" name="submit" value="Back">
+  <input type="submit" name="submit" value="Backward">
+  <input type="submit" name="submit" value="Stop">
+  <div>
+  <input type="range" name="points" id="points" value="50" min="0" max="100">
+  </div>
 </form>
 </body>
 </html>

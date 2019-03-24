@@ -1,12 +1,12 @@
 # Daniel McGinn
 # Run with python3
+# Having diffciulty impementing the speed control slider
 
 from time import sleep
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import getpass
 import sys
 import telnetlib
-import socket
 
 # Establish Telnet Connection to EV3
 HOST = input("Enter EV3 IP Address: ")
@@ -24,8 +24,7 @@ tn.write("motor_left = ev3.LargeMotor('outB');motor_right = ev3.LargeMotor('outC
 tn.read_until(">>>".encode('utf-8'))
 print("-----------Connection Initiated-----------")
 
-host_name = socket.gethostbyname(socket.gethostname()) # local IP adress of your computer
-# host_name = '10.0.0.173'  # Hardcode your IP address
+host_name = '10.0.0.173'  # Change this to your IP address
 host_port = 8000
 
 # Create Webserver
@@ -60,6 +59,10 @@ class MyServer(BaseHTTPRequestHandler):
               <input type="submit" name="submit" value="Right">
               <input type="submit" name="submit" value="Backward">
               <input type="submit" name="submit" value="Stop">
+              <div>
+              Speed:
+              <input type="range" name="Speed" id="Speed" value="50" min="0" max="100">
+              </div>
            </form>
            </body>
            </html>
@@ -67,41 +70,35 @@ class MyServer(BaseHTTPRequestHandler):
         self.do_HEAD()
         self.wfile.write(html.encode("utf-8"))
 
-#     Add Slider to adjust duty cycle 
-  #         <div class="slidecontainer">
-  #            <div>
-  #            DutyCycle :
-  #            <input type="range" min="1" max="255" value="128">
-
     def do_POST(self):
 
         content_length = int(self.headers['Content-Length'])  # Get the size of data
         post_data = self.rfile.read(content_length).decode("utf-8")  # Get the data
         post_data = post_data.split("=")[1]  # Only keep the value
 
-        if post_data == 'Red':
+        if post_data == 'Red&Speed':
             tn.write("ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED);ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)\n".encode('utf-8')) 
             tn.read_until(">>>".encode('utf-8'))
-        elif post_data == 'Orange':
+        elif post_data == 'Orange&Speed':
             tn.write("ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.ORANGE);ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.ORANGE)\n".encode('utf-8')) 
             tn.read_until(">>>".encode('utf-8'))
-        elif post_data == 'Yellow':
+        elif post_data == 'Yellow&Speed':
             tn.write("ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.YELLOW);ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.YELLOW)\n".encode('utf-8')) 
             tn.read_until(">>>".encode('utf-8'))
-        elif post_data == 'Green':
+        elif post_data == 'Green&Speed':
             tn.write("ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN);ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)\n".encode('utf-8')) 
             tn.read_until(">>>".encode('utf-8'))
-        elif post_data == 'Off':
+        elif post_data == 'Off&Speed':
             tn.write("ev3.Leds.all_off()\n".encode('utf-8'))
-        elif post_data == 'Left':
+        elif post_data == 'Left&Speed':
             tn.write("motor_left.run_direct(duty_cycle_sp=-10);motor_right.run_direct(duty_cycle_sp=10)\n".encode('utf-8'))
-        elif post_data == 'Forward':
+        elif post_data == 'Forward&Speed':
             tn.write("motor_left.run_direct(duty_cycle_sp=10);motor_right.run_direct(duty_cycle_sp=10)\n".encode('utf-8'))
-        elif post_data == 'Right':
+        elif post_data == 'Right&Speed':
             tn.write("motor_left.run_direct(duty_cycle_sp=10);motor_right.run_direct(duty_cycle_sp=-10)\n".encode('utf-8'))
-        elif post_data == 'Backward':
+        elif post_data == 'Backward&Speed':
             tn.write("motor_left.run_direct(duty_cycle_sp=-10);motor_right.run_direct(duty_cycle_sp=-10)\n".encode('utf-8'))
-        elif post_data == 'Stop':
+        elif post_data == 'Stop&Speed':
             tn.write("motor_left.run_direct(duty_cycle_sp=0);motor_right.run_direct(duty_cycle_sp=0)\n".encode('utf-8'))
         print(post_data) # Uncomment for debugging 
         self._redirect('/')  # Redirect back to the root url
