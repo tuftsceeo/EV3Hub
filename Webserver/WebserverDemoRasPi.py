@@ -3,9 +3,6 @@
 # Serves webpage at Router Level
 # See RasPiEV3HubMap.png
 
-# NOTE: This code is a work in progress, the Router Level Webserver has not yet been implemented
-# See RasPiEV3HubMapTasks.png
-
 from time import sleep
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import getpass
@@ -29,8 +26,13 @@ tn.write("motor_left = ev3.LargeMotor('outB');motor_right = ev3.LargeMotor('outC
 tn.read_until(">>>".encode('utf-8'))
 print("-----------Connection Initiated-----------")
 
-host_name = socket.gethostbyname(socket.gethostname()) # local IP address of your computer
-# host_name = '10.0.0.173'  # Hardcode your IP address
+# Get IP Address
+ip_address = '';
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8",80))
+ip_address = s.getsockname()[0]
+s.close()
+
 host_port = 8000
 
 # Create Webserver
@@ -102,12 +104,12 @@ class MyServer(BaseHTTPRequestHandler):
             tn.write("motor_left.run_direct(duty_cycle_sp=-10);motor_right.run_direct(duty_cycle_sp=-10)\n".encode('utf-8'))
         elif post_data == 'Stop':
             tn.write("motor_left.run_direct(duty_cycle_sp=0);motor_right.run_direct(duty_cycle_sp=0)\n".encode('utf-8'))
-        print(post_data) # Uncomment for debugging 
+        print(post_data) # Uncomment for debugging
         self._redirect('/')  # Redirect back to the root url
 
 if __name__ == '__main__':
-    http_server = HTTPServer((host_name, host_port), MyServer)
-    print("Server Starts - %s:%s" % (host_name, host_port))
+    http_server = HTTPServer((ip_address, host_port), MyServer)
+    print("Server Starts - %s:%s" % (ip_address, host_port))
 
     try:
         http_server.serve_forever()
