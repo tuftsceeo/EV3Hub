@@ -1,8 +1,13 @@
 <html>
 <body style="width:960px; margin: 20px auto;">
 <h1>EV3Dev Telnet Webserver Demo</h1>
-<p>Control EV3 Onboard LEDs</p>
+<form action="/IP" method="POST">
+  <input type="text" name="submit" value="EV3IPAddress" placeholder="IP Address">
+  <input type="submit" name="submit" value="Connect">
+  <div>
+</form>
 <form action="/" method="POST">
+<p>Control EV3 Onboard LEDs</p>
   <input type="submit" name="submit" value="Red">
   <input type="submit" name="submit" value="Orange">
   <input type="submit" name="submit" value="Yellow">

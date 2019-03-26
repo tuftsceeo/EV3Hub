@@ -53,7 +53,7 @@ class MyServer(BaseHTTPRequestHandler):
         html = '''
            <html>
            <body style="width:960px; margin: 20px auto;">
-           <h1>EV3Dev Telnet Webserver Demo</h1>
+           <h1>EV3Dev Telnet Webserver Demo on Raspberry Pi</h1>
            <p>Control EV3 Onboard LEDs</p>
            <form action="/" method="POST">
               <input type="submit" name="submit" value="Red">
