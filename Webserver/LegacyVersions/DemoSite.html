@@ -19,9 +19,18 @@
   <input type="submit" name="submit" value="Right">
   <input type="submit" name="submit" value="Backward">
   <input type="submit" name="submit" value="Stop">
-  <div>
-  <input type="range" name="points" id="points" value="50" min="0" max="100">
-  </div>
-</form>
+</form>  
+  <input type="range" min="0" max="100" value="50" class="slider" id="Slider">
+  <p>Speed : <span id="speed"></span></p>
+
+<script>
+var slider = document.getElementById("Slider");
+var output = document.getElementById("speed");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+</script>
 </body>
 </html>
