@@ -1,7 +1,7 @@
 # Daniel McGinn
 # Run with python3
 # Terminal Hosted on Webpage
-# See Terminal Webserver
+# See TerminalWebserver.png
 
 from time import sleep
 from http.server import BaseHTTPRequestHandler, HTTPServer
