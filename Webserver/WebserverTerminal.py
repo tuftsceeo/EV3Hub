@@ -1,6 +1,7 @@
 # Daniel McGinn
 # Run with python3
 # Terminal Hosted on Webpage
+# See Terminal Webserver
 
 from time import sleep
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -49,6 +50,13 @@ class MyServer(BaseHTTPRequestHandler):
         html = '''
             <html>
             <body style="width:960px; margin: 20px auto;">
+            <aside bgcolor="#FFFFFF" style="float:right;width:400px;">
+              <h3><br><br>Example Code</h3>
+              <p style="color:red;">Turn Left Onboard LED Red: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)<br>Turn Right Onboard LED Red: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)</p>
+              <p style="color:orange;">Turn Left Onboard LED Orange: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.ORANGE)<br>Turn Right Onboard LED Orange: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.ORANGE</p>
+              <p style="color:#B9B538;">Turn Left Onboard LED Yellow: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.YELLOW)<br>Turn Right Onboard LED Yellow: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.YELLOW)</p>
+              <p style="color:green;">Turn Left Onboard LED Green: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)<br>Turn Right Onboard LED Green: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)</p>
+            </aside>
             <h1>EV3 Terminal Window</h1>
             <form action="/IP" method="POST">
             <p>{}</p>
@@ -59,7 +67,7 @@ class MyServer(BaseHTTPRequestHandler):
              <input type="text" name="submit" placeholder="Enter Python3 Command" id="command" size="65">
              <input type="submit" name="SendCommand" value="Send Command">
             </form>
-            <textarea rows="20" cols="80">{}</textarea>
+            <textarea rows="21" cols="80">{}</textarea>
             </body>
             </html>
         '''
@@ -84,11 +92,12 @@ class MyServer(BaseHTTPRequestHandler):
         if 'Connect' in post_data and connected == False:
             post_data_ip = post_data.split("&")[0]
             tn = telnetlib.Telnet(post_data_ip)
-            terminal = tn.read_until("login: ".encode('utf-8')).decode('utf-8')
+            tn.read_until("login: ".encode('utf-8')).decode('utf-8')
             tn.write("robot\n".encode('utf-8'))
-            terminal = terminal+tn.read_until("Password: ".encode('utf-8')).decode('utf-8')
+            tn.read_until("Password: ".encode('utf-8')).decode('utf-8')
             tn.write("maker\n".encode('utf-8'))
-            terminal = terminal+tn.read_until("robot@ev3dev:~$".encode('utf-8')).decode('utf-8')
+            #Take out ASCII ev3dev logo becuase it doesn't look right in the textbox
+            terminal = "Debian"+tn.read_until("robot@ev3dev:~$".encode('utf-8')).decode('utf-8').split("Debian")[1] 
             tn.write("python3\n".encode('utf-8'))
             terminal = terminal+tn.read_until(">>>".encode('utf-8')).decode('utf-8')
             tn.write("import ev3dev.ev3 as ev3\n".encode('utf-8'))
@@ -98,7 +107,7 @@ class MyServer(BaseHTTPRequestHandler):
         elif 'SendCommand' in post_data:
             command = post_data.split("&")[0]
             #Some UTF8 characters still remain even after decoding, so I have to replace them manually
-            command = command.replace("+", " ").replace("%28","(").replace("%29",")").replace("%2C",",").replace("%3B",";") 
+            command = command.replace("+", " ").replace("%28","(").replace("%29",")").replace("%2C",",").replace("%3B",";").replace("%2B","+")
             print(command)
             tn.write((command+"\n").encode('utf-8'))
             terminal = terminal+tn.read_until(">>>".encode('utf-8')).decode('utf-8')
