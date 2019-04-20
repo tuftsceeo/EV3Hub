@@ -1,6 +1,6 @@
 # Daniel McGinn
 # Run with python3
-# Terminal Hosted on Webpage
+# Terminal With Ripple Window Hosted on Webpage
 # See TerminalWebserver.png
 
 from time import sleep
@@ -107,7 +107,8 @@ class MyServer(BaseHTTPRequestHandler):
         elif 'SendCommand' in post_data:
             command = post_data.split("&")[0]
             #Some UTF8 characters still remain even after decoding, so I have to replace them manually
-            command = command.replace("+", " ").replace("%28","(").replace("%29",")").replace("%2C",",").replace("%3B",";").replace("%2B","+")
+            command = command.replace("+", " ").replace("%21", "!").replace("%22", "\"").replace("%23", "#").replace("%24", "$").replace("%25", "%").replace("%26", "&").replace("%27", "'").replace("%28","(").replace("%29",")").replace("%2A","*").replace("%2B","+").replace("%2C",",").replace("%2D","-").replace("%2E",".").replace("%2F","/").replace("%3A",":").replace("%3B",";").replace("%3C","<").replace("%3D","=").replace("%3E",">").replace("%3F","?").replace("%40","@")
+            
             print(command)
             tn.write((command+"\n").encode('utf-8'))
             terminal = terminal+tn.read_until(">>>".encode('utf-8')).decode('utf-8')
