@@ -73,7 +73,7 @@ class MyServer(BaseHTTPRequestHandler):
             tn.read_until("Password: ".encode('utf-8')).decode('utf-8')
             tn.write("maker\n".encode('utf-8'))
             #Take out ASCII ev3dev logo becuase it doesn't look right in the textbox
-            terminal = "Debian"+tn.read_until("robot@ev3dev:~$".encode('utf-8')).decode('utf-8').split("Debian")[1] 
+            terminal = "Debian"+tn.read_until("robot@ev3dev:~$".encode('utf-8')).decode('utf-8').split("Debian")[1]
             tn.write("python3\n".encode('utf-8'))
             terminal = terminal+tn.read_until(">>> ".encode('utf-8')).decode('utf-8')
             tn.write("import ev3dev.ev3 as ev3\n".encode('utf-8'))
@@ -84,14 +84,10 @@ class MyServer(BaseHTTPRequestHandler):
             command = post_data.split("&")[0]
             command = command.replace("+", " ")
             command = unquote(command)
-            count = terminal.count("robot")
-            print(count)
-            if count > 1:
-                command =command.split(">>> |robot@ev3dev:~$ ")[-1] #Allow the ability to exit python
-            else:
-                command =command.split(">>> ")[-1]
+            command =command.rsplit("robot@ev3dev:",1)[-1].rsplit(">>> ",1)[-1] #Allow the ability to exit python
+            print("command - %s" % (command))
             tn.write((command+"\n").encode('utf-8'))
-            tup = tn.expect(["robot ".encode('utf-8'),">>> ".encode('utf-8')],timeout=None)
+            tup = tn.expect(["robot@ev3dev:".encode('utf-8'),">>> ".encode('utf-8')],timeout=None) #Note: dificulty with the ~$ from robot@ev3dev:~$
             print("tup2 - %s" % (tup[2]))
             terminal = terminal+tup[2].decode('utf-8')
         self._redirect('/')  # Redirect back to the root url
