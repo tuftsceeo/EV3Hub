@@ -90,9 +90,12 @@ class MyServer(BaseHTTPRequestHandler):
             command = post_data.split("&")[0]
             command = command.replace("+", " ")
             command = unquote(command).split(">>> ")[-1]
-            print(command)
+            command =command.rsplit("robot@ev3dev:",1)[-1].rsplit(">>> ",1)[-1] #Allow the ability to exit python
+            print("command - %s" % (command))
             tn.write((command+"\n").encode('utf-8'))
-            terminal = terminal+tn.read_until(">>> ".encode('utf-8')).decode('utf-8')
+            tup = tn.expect(["robot@ev3dev:".encode('utf-8'),">>> ".encode('utf-8')],timeout=None) #Note: dificulty with the ~$ from robot@ev3dev:~$
+            print("tup2 - %s" % (tup[2]))
+            terminal = terminal+tup[2].decode('utf-8')
         elif 'UpdateSpeed' in post_data:
             speed = post_data.split("&")[0]
             print("Speed set to %s" % (speed)) # Uncomment for debugging

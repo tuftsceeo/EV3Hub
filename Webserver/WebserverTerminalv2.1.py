@@ -90,6 +90,7 @@ class MyServer(BaseHTTPRequestHandler):
             tup = tn.expect(["robot@ev3dev:".encode('utf-8'),">>> ".encode('utf-8')],timeout=None) #Note: dificulty with the ~$ from robot@ev3dev:~$
             print("tup2 - %s" % (tup[2]))
             terminal = terminal+tup[2].decode('utf-8')
+            #terminal = terminal+tn.read_all().decode('utf-8') #try this at some point
         self._redirect('/')  # Redirect back to the root url
         
         return tn
