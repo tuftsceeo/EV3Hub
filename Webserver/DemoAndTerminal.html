@@ -1,0 +1,42 @@
+<html>
+<body style="width:960px; margin: 20px auto;">
+<aside style="float:right;width:550px;">
+ <br><br><br><form action="/EnterCommand" method="POST">
+ <textarea onkeydown="pressed(event)" rows="21" cols="80" name = "TerminalWindow" placeholder="Terminal Window Will Activate When EV3 is Connected">{}</textarea><br>
+ <input type="submit" name="SendCommand" value="Send Command">
+ </form>
+ <script src="PressEnter.js"></script> <!-- Bug- HTTPServer does't appear to recognize the JS file... what a shame-->
+</aside>
+<h1>EV3 Hub</h1>
+<h4>{}</h4>
+<form action="/IP" method="POST" data-disable-enter="1">
+ <input type="text" name="submit" placeholder="IP Address" id="ev3ip">
+ <input type="submit" name="Connect" value="Connect">
+</form>
+<form action="/" method="POST">
+<p>Control EV3 Onboard LEDs</p>
+ <input type="submit" name="submit" value="Red">
+ <input type="submit" name="submit" value="Orange">
+ <input type="submit" name="submit" value="Yellow">
+ <input type="submit" name="submit" value="Green">
+ <input type="submit" name="submit" value="Off">
+<p>Drive EV3</p>
+ <input type="submit" name="submit" value="Left">
+ <input type="submit" name="submit" value="Forward">
+ <input type="submit" name="submit" value="Right">
+ <input type="submit" name="submit" value="Backward">
+ <input type="submit" name="submit" value="Stop">
+</form>
+<form action="/" method="POST">
+ <input type="range" name="submit" min="0" max="100" class="slider" id="Slider">
+ <input type="submit" name="UpdateSpeed" value="Update Speed">
+ <span>Speed: {}</span>
+</form>
+ <h4><br><br>Try Writting your own code in the terminal!</h4>
+  <p>Here is some example code you can use to change the LED colors to get you started:</p>
+  <p style="color:#DA1616;">Turn Left Onboard LED Red: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)<br>Turn Right Onboard LED Red: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)</p>
+  <p style="color:orange;">Turn Left Onboard LED Orange: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.ORANGE)<br>Turn Right Onboard LED Orange: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.ORANGE</p>
+  <p style="color:#B9B538;">Turn Left Onboard LED Yellow: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.YELLOW)<br>Turn Right Onboard LED Yellow: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.YELLOW)</p>
+  <p style="color:green;">Turn Left Onboard LED Green: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)<br>Turn Right Onboard LED Green: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)</p>
+</body>
+</html>

@@ -5,6 +5,7 @@
 
 from time import sleep
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import unquote
 import getpass, sys, telnetlib, socket, os, webbrowser
 
 # Initialize global variables
@@ -47,32 +48,8 @@ class MyServer(BaseHTTPRequestHandler):
         else:
             status = "Enter your EV3s IP Address and click connect"
 
-        html = '''
-            <html>
-            <body style="width:960px; margin: 20px auto;">
-            <aside bgcolor="#FFFFFF" style="float:right;width:400px;">
-              <h3><br><br>Example Code</h3>
-              <p style="color:red;">Turn Left Onboard LED Red: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)<br>Turn Right Onboard LED Red: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)</p>
-              <p style="color:orange;">Turn Left Onboard LED Orange: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.ORANGE)<br>Turn Right Onboard LED Orange: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.ORANGE</p>
-              <p style="color:#B9B538;">Turn Left Onboard LED Yellow: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.YELLOW)<br>Turn Right Onboard LED Yellow: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.YELLOW)</p>
-              <p style="color:green;">Turn Left Onboard LED Green: ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)<br>Turn Right Onboard LED Green: ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)</p>
-            </aside>
-            <h1>EV3 Terminal Window</h1>
-            <form action="/IP" method="POST">
-            <p>{}</p>
-             <input type="text" name="submit" placeholder="IP Address" id="ev3ip">
-             <input type="submit" name="Connect" value="Connect" onclick="myFunction()">
-            </form>
-            <form action="/" method="POST">
-            <textarea rows="21" cols="80" name = "TerminalWindow" placeholder="Terminal Window Will Activate When EV3 is Connected">{}</textarea><br>
-            <input type="submit" name="SendCommand" value="Send Command">
-            </form>
-            </body>
-            </html>
-        '''
-
         self.do_HEAD()
-        self.wfile.write(html.format(status, terminal).encode("utf-8"))
+        self.wfile.write(open('TerminalSite.html').read().format(status, terminal).encode("utf-8"))
         return connected
         return post_data_ip
         return terminal
@@ -98,19 +75,18 @@ class MyServer(BaseHTTPRequestHandler):
             #Take out ASCII ev3dev logo becuase it doesn't look right in the textbox
             terminal = "Debian"+tn.read_until("robot@ev3dev:~$".encode('utf-8')).decode('utf-8').split("Debian")[1] 
             tn.write("python3\n".encode('utf-8'))
-            terminal = terminal+tn.read_until(">>>".encode('utf-8')).decode('utf-8')
+            terminal = terminal+tn.read_until(">>> ".encode('utf-8')).decode('utf-8')
             tn.write("import ev3dev.ev3 as ev3\n".encode('utf-8'))
-            terminal = terminal+tn.read_until(">>>".encode('utf-8')).decode('utf-8')
+            terminal = terminal+tn.read_until(">>> ".encode('utf-8')).decode('utf-8')
             print("-----------Connection Initiated-----------")
             connected = True
         elif 'SendCommand' in post_data:
             command = post_data.split("&")[0]
-            #Some UTF8 characters still remain even after decoding, so I have to replace them manually
-            command = command.replace("+", " ").replace("%21", "!").replace("%22", "\"").replace("%23", "#").replace("%24", "$").replace("%25", "%").replace("%26", "&").replace("%27", "'").replace("%28","(").replace("%29",")").replace("%2A","*").replace("%2B","+").replace("%2C",",").replace("%2D","-").replace("%2E",".").replace("%2F","/").replace("%3A",":").replace("%3B",";").replace("%3C","<").replace("%3D","=").replace("%3E",">").replace("%3F","?").replace("%40","@")
-            command = command.split(">>>")[-1]
+            command = command.replace("+", " ")
+            command = unquote(command).split(">>> ")[-1]
             print(command)
             tn.write((command+"\n").encode('utf-8'))
-            terminal = terminal+tn.read_until(">>>".encode('utf-8')).decode('utf-8')
+            terminal = terminal+tn.read_until(">>> ".encode('utf-8')).decode('utf-8')
         self._redirect('/')  # Redirect back to the root url
         
         return tn
