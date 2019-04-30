@@ -1,0 +1,41 @@
+<html>
+<body style="width:960px; margin: 20px auto;">
+<aside style="float:right;width:500px;">
+ <br><br><br><form action="/EnterCommand" method="POST" onkeydown="pressed(event,0)">
+ <textarea rows="21" cols="80" name = "TerminalWindow" placeholder="Terminal Window Will Activate When EV3 is Connected">%s</textarea><br>
+ <input type="submit" id="SendCommand" name="SendCommand" value="Send Command" hidden="hidden">
+ <input type="text" name="SendCommand" value="" hidden="hidden">
+ </form>
+ <!--<script src="PressEnter.js"></script> Bug- HTTPServer does't appear to recognize the JS file-->
+ <script>
+function pressed(e,FormNum) {
+    // Has the enter key been pressed?
+    if ( (window.event ? event.keyCode : e.which) == 13) { 
+        // If it has been so, manually submit the <form>
+        document.forms[FormNum].submit();
+    }
+}
+</script>
+</aside>
+<h1>EV3 Hub</h1>
+<h4>%s</h4>
+<form action="/IP" method="POST" data-disable-enter="1">
+ <input type="text" name="submit" placeholder="IP Address" id="ev3ip">
+ <input type="submit" name="Connect" value="Connect">
+</form>
+<form id = "pageForm" action="/Page" method="POST" onchange="submit(2)">
+  <span>Select a page: </span>
+  <select id="pageSelect" name = "page">
+    <option value="simplePage">LED & Drive Buttons</option>
+    <option value="pythonPage">Sample Python Code</option>
+  </select>
+  <input id="submitpage" type="submit" hidden="hidden">
+ </form>
+<script type="text/javascript">
+  document.getElementById('pageSelect').value = "<?php echo $_GET['page'];?>";
+</script>
+ <script>
+ function submit(FormNum) {
+        document.forms[FormNum].submit();
+}
+</script>

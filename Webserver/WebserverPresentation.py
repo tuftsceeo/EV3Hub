@@ -13,6 +13,7 @@ post_data_ip = "0"
 speed = "50"
 drive = "stop"
 terminal = "" #intialize blank terminal
+page = "simplePage"
 
 # Get IP Address
 ip_address = '';
@@ -43,19 +44,32 @@ class MyServer(BaseHTTPRequestHandler):
         global post_data_ip
         global speed
         global terminal
+        global page
+
+#        print('page = ' + page)
 
         if connected == True:
             status = "You are connected to an EV3 with IP Address "+post_data_ip
         else:
             status = "Enter your EV3s IP Address and click connect"
 
+        
+
         self.do_HEAD()
+        if  (page == 'simplePage'):
+            pageContent = (open('WebserverBase.html').read()%(terminal, status))+(open('simple.html').read()%(speed))
+        elif (page == 'pythonPage'):
+            pageContent = (open('WebserverBase.html').read()%(terminal, status))+(open('python.html').read())
+
+        self.wfile.write(pageContent.encode("utf-8"))
+
         #self.wfile.write(open('DemoAndTerminal.html').read().format(terminal, status, speed).encode("utf-8"))
-        self.wfile.write((open('DemoAndTerminal.html').read()%(terminal, status, speed)).encode("utf-8"))
+        #self.wfile.write((open('WebserverPresentation.html').read()%(terminal, status, speed)).encode("utf-8"))
         return connected
         return post_data_ip
         return speed
         return terminal
+        return page
 
     def do_POST(self):
         global tn
@@ -64,11 +78,17 @@ class MyServer(BaseHTTPRequestHandler):
         global speed
         global drive
         global terminal
+        global page
 
         content_length = int(self.headers['Content-Length'])  # Get the size of data
         post_data = self.rfile.read(content_length).decode('utf-8')  # Get the data
         post_data = post_data.split("=")[1]  # Only keep the value
         print(post_data) # Uncomment for debugging
+
+        if  'simplePage' in post_data:
+            page = 'simplePage'
+        elif 'pythonPage' in post_data:
+            page = 'pythonPage'
 
         if 'Connect' in post_data and connected == False:
             post_data_ip = post_data.split("&")[0]
@@ -91,7 +111,7 @@ class MyServer(BaseHTTPRequestHandler):
             command = post_data.split("&")[0]
             command = command.replace("+", " ")
             command = unquote(command).split(">>> ")[-1]
-            command =command.rsplit("robot@ev3dev:",1)[-1].rsplit(">>> ",1)[-1] #Allow the ability to exit python
+            command = command.rsplit("robot@ev3dev:",1)[-1].rsplit(">>> ",1)[-1] #Allow the ability to exit python
             print("command - %s" % (command))
             tn.write((command+"\n").encode('utf-8'))
             tup = tn.expect(["robot@ev3dev:".encode('utf-8'),">>> ".encode('utf-8')],timeout=None) #Note: dificulty with the ~$ from robot@ev3dev:~$
@@ -155,6 +175,7 @@ class MyServer(BaseHTTPRequestHandler):
         return speed
         return drive
         return terminal
+        return page
 
 # Create Webserver
 if __name__ == '__main__':

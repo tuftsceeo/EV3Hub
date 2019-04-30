@@ -22,17 +22,25 @@ function pressed(e,FormNum) {
  <input type="text" name="submit" placeholder="IP Address" id="ev3ip">
  <input type="submit" name="Connect" value="Connect">
 </form>
-<form id="myForm" onchange="getOption()">
+<form id="myForm" onchange="getOption()" action="/" method="POST">
 <select id="mySelect">
-  <option>LED & Drive Buttons</option>
-  <option>Sample Python Code</option>
+  <option selected="simple">LED & Drive Controls</option>
+  <option value="python">Sample Python Code</option>
+  <input type="submit">
 </select>
 </form>
 <script>
 function getOption() {
   var obj = document.getElementById("mySelect");
-  document.getElementById("demo").innerHTML = 
+  document.getElementById("page").innerHTML = 
   obj.options[obj.selectedIndex].text;
+}
+</script>
+<script>
+function showPage() {
+  if ("page" == "LED & Drive Buttons") {
+    document.body.appendChild();   
+  }
 }
 </script>
 <p id="page"></p>
