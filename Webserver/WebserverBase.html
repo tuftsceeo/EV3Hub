@@ -6,6 +6,9 @@
  <input type="submit" id="SendCommand" name="SendCommand" value="Send Command" hidden="hidden">
  <input type="text" name="SendCommand" value="" hidden="hidden">
  </form>
+<form action="/" method="POST">
+     <input type="submit" name="Clear" value="Clear Terminal">
+ </form>
  <!--<script src="PressEnter.js"></script> Bug- HTTPServer does't appear to recognize the JS file-->
  <script>
 function pressed(e,FormNum) {
@@ -28,6 +31,7 @@ function pressed(e,FormNum) {
   <select id="pageSelect" name = "page">
     <option value="simplePage">LED & Drive Buttons</option>
     <option value="pythonPage">Sample Python Code</option>
+    <option value="formPage">Forms (in development)</option>
   </select>
   <input id="submitpage" type="submit" hidden="hidden">
  </form>
