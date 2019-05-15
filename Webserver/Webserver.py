@@ -15,7 +15,7 @@ drive = "stop"
 terminal = "" #intialize blank terminal
 page = "simplePage"
 
-pyCode = {'Beep':'''ev3.Sound.beep().wait()'''}
+pyCode = {'Beep':'''ev3.Sound.beep()'''}
 
 # Get IP Address
 ip_address = '';
